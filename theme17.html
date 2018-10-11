@@ -4,8 +4,8 @@
  |
  |  Theme #17 by raiidens (@ tumblr)
  |  Published July 2016
- |	Updated May 2018
- |  Ver. 3.00
+ |	Updated September 2018
+ |  Ver. 3.01
  |
  |  Edit as much as you like, but please do not
  |  claim as your own work, and leave credit somewhere.
@@ -55,6 +55,9 @@
 <meta name="select:Lazy load images" content="lazy-load-normal" title="normal">
 <meta name="select:Lazy load images" content="lazy-load-fade" title="fade in images on load">
 <meta name="select:Lazy load images" content="lazy-load-none" title="none">
+
+<meta name="select:Post comments" content="post-comments-unnest" title="unnest">
+<meta name="select:Post comments" content="post-comments-default" title="default">
 
 <meta name="select:Post link underline" content="post-link-underline-enable" title="enabled">
 <meta name="select:Post link underline" content="post-link-underline-disable" title="disabled">
@@ -178,7 +181,7 @@
 <meta name="font:Post title font" content="'Montserrat', sans-serif">
 
 <link href='//fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.3.1/css/all.css">
 
 <link href="//static.tumblr.com/qudkd6d/OcDnl99gb/style.css" rel="stylesheet" type="text/css"/>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -335,6 +338,8 @@ a:hover {color: {color:Post link hover};}
     -webkit-filter: grayscale(0%);
 }
 
+.post img {max-width: 100%;}
+
 .photo, .photoset {padding: 0px;}
 
 .photoset .photo-slideshow {
@@ -352,6 +357,7 @@ a:hover {color: {color:Post link hover};}
     line-height: 0.85;
     text-shadow: 1px 1px {color:Post background}, 1px -1px {color:Post background}, -1px 1px {color:Post background}, -1px -1px {color:Post background};
 }
+.post-link-underline-enable .answer-text a {text-shadow: 1px 1px {color:Answer background}, 1px -1px {color:Answer background}, -1px 1px {color:Answer background}, -1px -1px {color:Answer background};}
 
 .title {
     font-variant: small-caps;
@@ -378,20 +384,22 @@ a:hover {color: {color:Post link hover};}
 .photo .photo-post-img {
     cursor: pointer;
     display: block;
-    margin: 0 auto;
 }
 
-.tumblr_video_container {
-    width: 100% !important;
-    margin-bottom: 5px;
+.video .video-player {
     position: relative;
-    height: 0 !important;
-    padding-bottom: 56.3%;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
 }
-.tumblr_video_container iframe {
+
+.video .video-player iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    position: absolute;
 }
 
 .chat span {
@@ -914,26 +922,26 @@ $(document).tooltip({
         <div id="desc" class="{select:Description}">{Description}</div>
         {block:Pagination}
         <div class="sidebar-pagination {select:Pagination}">
-            {block:PreviousPage}<a href="{PreviousPage}">{/block:PreviousPage}<span class="fa-stack fa-lg pagination-unavailable {block:PreviousPage}pagination-available{/block:PreviousPage}"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-chevron-left fa-stack-1x"></i></span>{block:PreviousPage}</a>{/block:PreviousPage}
-            {block:NextPage}<a href="{NextPage}">{/block:NextPage}<span class="fa-stack fa-lg pagination-unavailable {block:NextPage}pagination-available{/block:NextPage}"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-chevron-right fa-stack-1x"></i></span>{block:NextPage}</a>{/block:NextPage}
+            {block:PreviousPage}<a href="{PreviousPage}">{/block:PreviousPage}<span class="fa-stack pagination-unavailable {block:PreviousPage}pagination-available{/block:PreviousPage}"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-chevron-left fa-stack-1x"></i></span>{block:PreviousPage}</a>{/block:PreviousPage}
+            {block:NextPage}<a href="{NextPage}">{/block:NextPage}<span class="fa-stack pagination-unavailable {block:NextPage}pagination-available{/block:NextPage}"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-chevron-right fa-stack-1x"></i></span>{block:NextPage}</a>{/block:NextPage}
         </div>
         {/block:Pagination}
     </div>
     
     <div id="link-container">
-        <div class="link link-selected" id="content-link" data-id="content"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-th-large fa-stack-1x"></i></span>content</div>
-        <div class="link {select:Ask link}" data-id="ask-container"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-comment fa-stack-1x"></i></span>message</div>
-        <a href="/submit"><div class="link {select:Submit link}" id="msgbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-inbox fa-stack-1x"></i></span>submit</div></a>
-        <div class="link {select:About container}" data-id="about-container"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-user fa-stack-1x"></i></span>about</div>
-        <div class="link {select:Nav container}" data-id="nav-container"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-bars fa-stack-1x"></i></span>navigation</div>
-        <a href="http://raiidens.tumblr.com/tagged/themesbyraiidens"><div class="link theme-link" title="by raiidens"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-code fa-stack-1x"></i></span>theme</div></a>
+        <div class="link link-selected" id="content-link" data-id="content"><span class="fa-stack"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-th-large fa-stack-1x"></i></span>content</div>
+        <div class="link {select:Ask link}" data-id="ask-container"><span class="fa-stack"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-comment fa-stack-1x"></i></span>message</div>
+        <a href="/submit"><div class="link {select:Submit link}" id="msgbtn"><span class="fa-stack"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-inbox fa-stack-1x"></i></span>submit</div></a>
+        <div class="link {select:About container}" data-id="about-container"><span class="fa-stack"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-user fa-stack-1x"></i></span>about</div>
+        <div class="link {select:Nav container}" data-id="nav-container"><span class="fa-stack"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-bars fa-stack-1x"></i></span>navigation</div>
+        <a href="http://raiidens.tumblr.com/tagged/themesbyraiidens"><div class="link theme-link" title="by raiidens"><span class="fa-stack"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-code fa-stack-1x"></i></span>theme</div></a>
         
         <div class="link search {select:Search bar}">
-            <span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-search fa-stack-1x"></i></span>
+            <span class="fa-stack"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-search fa-stack-1x"></i></span>
             <form action="/search" method="get" class="search-form"><input type="text" name="q" value="{SearchQuery}" placeholder="search" /></form>
         </div>
         
-        <a href="http://tumblr.com"><div class="link {select:Dashboard link}"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-power-off fa-stack-1x"></i></span><span id="dashboard-link">dashboard</span></div></a>
+        <a href="http://tumblr.com"><div class="link {select:Dashboard link}"><span class="fa-stack"><i class="far fa-circle fa-stack-2x"></i><i class="fas fa-power-off fa-stack-1x"></i></span><span id="dashboard-link">dashboard</span></div></a>
     </div>
 </div>
 
@@ -1170,6 +1178,19 @@ $(document).tooltip({
 <script>
 
 $(document).ready(function(){
+    
+    if ("{select:Post comments}" != "post-comments-default") {
+        $(".post .content blockquote").each(function() {
+            $(this).parent().prepend($(this).children());
+            $(this).remove();
+        });
+    
+        $(".post a.tumblr_blog").each(function() {
+            var $user = $(this).parent();
+            $user.html($(this));
+            $user.prepend("<hr/>").append(":");
+        });
+    }
     
     if ("{select:Tumblr controls}" == "tumblr-controls-dark") {
         $(".tmblr-iframe").addClass("tumblr-controls-dark");
