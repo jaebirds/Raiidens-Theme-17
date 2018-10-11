@@ -6,8 +6,8 @@
  |
  |  Theme #17 by raiidens (@ tumblr)
  |  Published July 2016
- |  Updated August 2016
- |  Ver. 1.01
+ |  Updated September 2016
+ |  Ver. 1.02
  |
  |  Edit as much as you like, but please do not
  |  claim as your own work, and leave credit somewhere.
@@ -38,6 +38,7 @@
 <meta name="if:Fade in images on load" content="1">
 <meta name="if:Click image for full res" content="0">
 <meta name="if:Show captions" content="1">
+<meta name="if:Always show tags" content="0">
 <meta name="if:Disable ask" content="0">
 <meta name="if:Disable about" content="0">
 <meta name="if:Disable nav" content="0">
@@ -433,6 +434,7 @@ a:hover {color: {color:Post link hover};}
     -webkit-filter: blur({text:Background blur}px);
     filter: blur({text:Background blur}px);
     opacity: {text:Background opacity};
+    z-index: -1;
 }
 
 #container {
@@ -866,7 +868,7 @@ $(document).tooltip({
         
             <div class="infobar"></div>
             <div class="infobox">
-            <table style="width: 470px; {block:If400pxPosts}width: 370px;{/block:If400pxPosts} {block:If250pxPosts}width: 220px;{/block:If250pxPosts}"><tr><td>{block:Date}<a href="{Permalink}" class="tooltip" title="{TimeAgo}">{ShortMonth} {DayOfMonth}, {Year}</a>{/block:Date}{block:RebloggedFrom} <i class="fa fa-retweet" aria-hidden="true"></i> <a href="{ReblogParentURL}">{ReblogParentName}</a>{block:PermalinkPage} <i class="fa fa-pencil" aria-hidden="true"></i> <a href="{ReblogRootURL}">{ReblogRootName}</a>{/block:PermalinkPage}{/block:RebloggedFrom} — <a href="{Permalink}" class="tooltip" title="Permalink">{NoteCountWithLabel}</a>{block:HasTags} — <a href="javaScript:void(0);"><span class="tagtoggle">Tags</span></a>{/block:HasTags}</td><td style="width: 60px;">
+            <table style="width: 470px; {block:If400pxPosts}width: 370px;{/block:If400pxPosts} {block:If250pxPosts}width: 220px;{/block:If250pxPosts}"><tr><td>{block:Date}<a href="{Permalink}" class="tooltip" title="{TimeAgo}">{ShortMonth} {DayOfMonth}, {Year}</a>{/block:Date}{block:RebloggedFrom} <i class="fa fa-retweet" aria-hidden="true"></i> <a href="{ReblogParentURL}">{ReblogParentName}</a>{block:PermalinkPage} <i class="fa fa-pencil" aria-hidden="true"></i> <a href="{ReblogRootURL}">{ReblogRootName}</a>{/block:PermalinkPage}{/block:RebloggedFrom} — <a href="{Permalink}" class="tooltip" title="Permalink">{NoteCountWithLabel}</a>{block:HasTags}{block:IfNotAlwaysShowTags} — <a href="javaScript:void(0);"><span class="tagtoggle">Tags</span></a>{/block:IfNotAlwaysShowTags}{/block:HasTags}</td><td style="width: 60px;">
             
             
             <ul class="rebloglike">
@@ -887,7 +889,7 @@ $(document).tooltip({
                 
                 
             </td></tr>
-            {block:HasTags}<tr><td colspan="3"><span class="tags" style="display: none;">{block:Tags}<a href="{TagURL}">#{Tag}</a>   {/block:Tags}</span></td></tr>{/block:HasTags}
+            {block:HasTags}<tr><td colspan="3"><span class="tags" {block:IfNotAlwaysShowTags}style="display: none;"{/block:IfNotAlwaysShowTags}>{block:Tags}<a href="{TagURL}">#{Tag}</a>   {/block:Tags}</span></td></tr>{/block:HasTags}
             </table>
             </div>
             </div>
@@ -995,9 +997,10 @@ $(document).ready(function(){
       }
    });{/block:IfNotDisableNav}
     
+    {block:IfNotAlwaysShowTags}
     $(".tagtoggle").click(function() {
         $(this).parent().parent().parent().parent().find(".tags").toggle("blind", 500);
-    });
+    });{/block:IfNotAlwaysShowTags}
 });
 </script>
 {block:IfLazyLoadImages}
