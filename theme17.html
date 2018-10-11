@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<head>
-<title>{Title}</title>
 
 <!--
  |
  |  Theme #17 by raiidens (@ tumblr)
  |  Published July 2016
- |  Updated September 2016
- |  Ver. 1.03
+ |  Updated September 2017
+ |  Ver. 2.00
  |
  |  Edit as much as you like, but please do not
  |  claim as your own work, and leave credit somewhere.
+ |
+ |  ! IMPORTANT NOTES !
+ |  - ctrl+f "about tab" to find where you can edit that
+ |  - you can change the title/desc widths in the options so they fit better
  |
  |  Credits:
  |  Font Awesome Icons - https://fortawesome.github.io/Font-Awesome/
@@ -19,26 +21,31 @@
  |  jQuery - https://jquery.com/
  |  jQuery UI - https://jqueryui.com/
  |  Lazy Load - http://www.appelsiini.net/projects/lazyload
- |  Paul Irish Infinite Scroll - http://www.infinite-scroll.com/
+ |  Lightbox - http://www.lokeshdhakar.com/projects/lightbox2/
  |  PXU Photoset Extended - https://github.com/PixelUnion/Extended-Tumblr-Photoset
  |
- |  ! IMPORTANT !
- |  - use ctrl+f to search for USERNAME and replace it with your URL for asks to work
- |  - ctrl+f "about tab" to find where you can edit that
- |  - you can change the title/desc widths in the options so they fit better
  |
  -->
+ 
+<head>
+<title>{Title}</title>
 
-<meta name="if:500px posts" content="0">
-<meta name="if:400px posts" content="1">
-<meta name="if:250px posts" content="0">
+<link rel="shortcut icon" href="{Favicon}">
+<link rel="alternate" type="application/rss+xml" href="{RSS}">
+{block:Description}<meta name="description" content="{MetaDescription}" />{/block:Description}
+
+<!-- Please don't edit these meta tags! -->
+<meta name="select:Post width" content="500" title="500px">
+<meta name="select:Post width" content="400" title="400px">
+<meta name="select:Post width" content="250" title="250px">
 <meta name="if:Custom avatar" content="0">
-<meta name="if:Infinite scrolling" content="0">
 <meta name="if:Lazy load images" content="1">
-<meta name="if:Fade in images on load" content="1">
+<meta name="if:Fade in images on load" content="0">
 <meta name="if:Click image for full res" content="0">
+<meta name="if:Post link underline" content="1">
 <meta name="if:Show captions" content="1">
 <meta name="if:Always show tags" content="0">
+<meta name="if:Use ask page instead" content="0">
 <meta name="if:Disable ask" content="0">
 <meta name="if:Disable about" content="0">
 <meta name="if:Disable nav" content="0">
@@ -131,14 +138,14 @@
 <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
 
-<link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-
 <link href="https://static.tumblr.com/qudkd6d/OcDnl99gb/style.css" rel="stylesheet" type="text/css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="https://static.tumblr.com/qudkd6d/Az6nkemqr/pxuphotoset.min.js"></script>
 
-<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<link href="http://static.tumblr.com/o4povtk/Cesopcula/lightbox.css" rel="stylesheet" type="text/css"/>
 
 <style type="text/css">
 
@@ -151,6 +158,7 @@
     font-size: 6pt;
     line-height: 16px;
     text-transform: uppercase;
+    box-shadow: none;
 }
 
 ::-webkit-scrollbar {
@@ -165,10 +173,8 @@
 }
 
 .tmblr-iframe {
-    top: 3px !important;
-    right: 3px !important;
     position: fixed !important;
-    z-index: 999999 !important;
+    z-index: 9999 !important;
     white-space: nowrap;
     opacity: 0.7;
     {block:IfInvertedTumblrButtons}
@@ -193,7 +199,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, blockquote {
     padding: 0;
     list-style: none;
 }
-p {margin-bottom: 10px;}
+p, h1, h3 {margin-bottom: 10px;}
 
 body {
     font-family: {font:Post font};
@@ -220,7 +226,8 @@ hr {
 }
 
 blockquote {
-    padding: 3px 0 3px 10px;
+    padding: 3px 10px;
+    margin-bottom: 10px;
     border-left: 7px solid {color:Blockquote};
     text-align: justify;
 }
@@ -246,9 +253,7 @@ a {
 a:hover {color: {color:Post link hover};}
            
 .post {
-    width: 500px;
-    {block:If400pxPosts}width: 400px;{/block:If400pxPosts}
-    {block:If250pxPosts}width: 250px;{/block:If250pxPosts}
+    width: {select:Post Width}px;
     height: auto;
     overflow: hidden;
     background-color: {color:Post background};
@@ -266,9 +271,21 @@ a:hover {color: {color:Post link hover};}
     opacity: {text:Post opacity};
 }
 
+.text img {
+    max-width: 100%;
+    height: auto;
+}
+
 .photo, .photoset {padding: 0px;}
 
 .content {padding: 10px;}
+{block:IfPostLinkUnderline}
+.content a, .sidebar-content a {
+    border-bottom: 1px solid {color:Post link};
+    display: inline-block;
+    line-height: 0.85;
+    text-shadow: 1px 1px {color:Post background}, 1px -1px {color:Post background}, -1px 1px {color:Post background}, -1px -1px {color:Post background};
+}{/block:IfPostLinkUnderline}
 
 {block:IfBlackAndWhiteImages}
 .post img, .html_photoset {
@@ -286,7 +303,7 @@ a:hover {color: {color:Post link hover};}
 .title {
     font-variant: small-caps;
     font-size: 18px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     color: {color:Post title};
     font-family: {font:Post title font};
     -webkit-transition: all 0.3s ease-in-out;
@@ -294,7 +311,10 @@ a:hover {color: {color:Post link hover};}
     -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
 }
-.title a {color: {color:Post title link};}
+.title a {
+    color: {color:Post title link};
+    border-bottom: 0px;
+}
            
 .photo {margin-bottom: 5px;}
 .photo img {border: 0;}
@@ -637,7 +657,8 @@ a:hover {color: {color:Post link hover};}
 <script>
 $(document).tooltip({
     track: true,
-    tooltipClass: "tooltiptheme"
+    tooltipClass: "tooltiptheme",
+    items: ".tooltip"
 });
 </script>
 </head>
@@ -650,14 +671,14 @@ $(document).tooltip({
         <a href="/"><div id="avatar"></div>
         <div id="blogtitle">{Title}</div></a>
         <div id="desc">{Description}</div>
-        {block:IfNotInfiniteScrolling}{block:Pagination}<div id="pagcont">
+        {block:Pagination}<div id="pagcont">
             {block:PreviousPage}<a href="{PreviousPage}">{/block:PreviousPage}<span class="fa-stack fa-lg pagun {block:PreviousPage}pag{/block:PreviousPage}"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-chevron-left fa-stack-1x"></i></span>{block:PreviousPage}</a>{/block:PreviousPage}
             {block:NextPage}<a href="{NextPage}">{/block:NextPage}<span class="fa-stack fa-lg pagun {block:NextPage}pag{/block:NextPage}"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-chevron-right fa-stack-1x"></i></span>{block:NextPage}</a>{/block:NextPage}
-        </div>{/block:Pagination}{/block:IfNotInfiniteScrolling}
+        </div>{/block:Pagination}
     </div>
     <div id="rightcont">
         <div class="mlink mlinksel" id="contentbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-th-large fa-stack-1x"></i></span>content</div>
-        {block:IfNotDisableAsk}<div class="mlink" id="msgbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-comment fa-stack-1x"></i></span>message</div>{/block:IfNotDisableAsk}
+        {block:IfNotDisableAsk}{block:IfUseAskPageInstead}<a href="/ask">{/block:IfUseAskPageInstead}<div class="mlink" id="msgbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-comment fa-stack-1x"></i></span>message</div>{block:IfUseAskPageInstead}</a>{/block:IfUseAskPageInstead}{/block:IfNotDisableAsk}
         {block:IfNotDisableAbout}<div class="mlink" id="aboutbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-user fa-stack-1x"></i></span>about</div>{/block:IfNotDisableAbout}
         {block:IfNotDisableNav}<div class="mlink" id="navbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-bars fa-stack-1x"></i></span>navigation</div>{/block:IfNotDisableNav}
         <a href="http://raiidens.tumblr.com/tagged/themesbyraiidens"><div class="mlink tooltip" title="© raiidens"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-code fa-stack-1x"></i></span>theme</div></a>
@@ -669,24 +690,16 @@ $(document).tooltip({
     </div>
 </div>
 
-<div id="msgcont" style="margin-top: -50px;"><div class="post"><div class="content">
+{block:IfNotDisableAsk}{block:IfNotUseAskPageInstead}<div id="msgcont" style="margin-top: -50px;"><div class="post"><div class="content">
 
 
 
+    <iframe frameborder="0" height="190" id="ask_form" scrolling="no" src="http://www.tumblr.com/ask_form/{Name}.tumblr.com" width="100%" style="background-color: transparent; overflow: hidden; border: solid 1px #FFFFFF;"></iframe>
+    
 
-
-    <!-- Replace USERNAME below with your tumblr URL -->
-
-
-    <iframe frameborder="0" height="190" id="ask_form" scrolling="no" src="http://www.tumblr.com/ask_form/USERNAME.tumblr.com" width="100%" style="background-color: transparent; overflow: hidden; border: solid 1px #FFFFFF;"></iframe>
     
     
-    
-    
-    
-    
-    
-</div></div></div>
+</div></div></div>{/block:IfNotUseAskPageInstead}{/block:IfNotDisableAsk}
 
 <div id="aboutcont"><div class="post"><div class="content maxheight">
     
@@ -752,7 +765,9 @@ $(document).tooltip({
 
 {block:Photo}
 <div class="photo">
-    {block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" target="_blank">{/block:HighRes}{/block:IfClickImageForFullRes}<img {block:If500pxPosts}src="{PhotoURL-500}" data-original="{PhotoURL-500}" width="{PhotoWidth-500}" height="{PhotoHeight-500}"{/block:If500pxPosts}{block:If400pxPosts}src="{PhotoURL-400}" data-original="{PhotoURL-400}" width="{PhotoWidth-400}" height="{PhotoHeight-400}"{/block:If400pxPosts}{block:If250pxPosts}src="{PhotoURL-250}" data-original="{PhotoURL-250}" width="{PhotoWidth-250}" height="{PhotoHeight-250}"{/block:If250pxPosts} alt="{PhotoAlt}">{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}
+    <div class="500px-posts" style="display: none; visibility: hidden">{block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" data-lightbox="{PostID}">{/block:HighRes}{/block:IfClickImageForFullRes}<img src="{PhotoURL-500}" data-original="{PhotoURL-500}" width="{PhotoWidth-500}" height="{PhotoHeight-500}" alt="{PhotoAlt}">{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}</div>
+    <div class="400px-posts" style="display: none; visibility: hidden">{block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" data-lightbox="{PostID}">{/block:HighRes}{/block:IfClickImageForFullRes}<img src="{PhotoURL-400}" data-original="{PhotoURL-400}" width="{PhotoWidth-400}" height="{PhotoHeight-400}" alt="{PhotoAlt}">{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}</div>
+    <div class="250px-posts" style="display: none; visibility: hidden">{block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" data-lightbox="{PostID}">{/block:HighRes}{/block:IfClickImageForFullRes}<img src="{PhotoURL-250}" data-original="{PhotoURL-250}" width="{PhotoWidth-250}" height="{PhotoHeight-250}" alt="{PhotoAlt}">{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}</div>
     {block:IfShowCaptions}
             {block:Caption}
             <div class="content">{Caption}</div>
@@ -770,9 +785,9 @@ $(document).tooltip({
 
 {block:Photoset}
 <div class="photoset">
-    {block:If500pxPosts}<div class="photo-slideshow" id="photoset_{PostID}" data-layout="{PhotosetLayout}">{block:Photos}<div class="photo-data">{block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" target="_blank">{/block:HighRes}{/block:IfClickImageForFullRes}<div class="pxu-photo"><img src="{PhotoURL-500}" width="{PhotoWidth-500}" height="{PhotoHeight-500}" data-highres="{PhotoURL-HighRes}" data-width="{PhotoWidth-HighRes}" data-height="{PhotoHeight-HighRes}"></div>{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}</div>{/block:Photos}</div>{/block:If500pxPosts}
-    {block:If400pxPosts}<div class="photo-slideshow" id="photoset_{PostID}" data-layout="{PhotosetLayout}">{block:Photos}<div class="photo-data">{block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" target="_blank">{/block:HighRes}{/block:IfClickImageForFullRes}<div class="pxu-photo"><img src="{PhotoURL-400}" width="{PhotoWidth-400}" height="{PhotoHeight-400}" data-highres="{PhotoURL-HighRes}" data-width="{PhotoWidth-HighRes}" data-height="{PhotoHeight-HighRes}"></div>{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}</div>{/block:Photos}</div>{/block:If400pxPosts}
-    {block:If250pxPosts}<div class="photo-slideshow" id="photoset_{PostID}" data-layout="{PhotosetLayout}">{block:Photos}<div class="photo-data">{block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" target="_blank">{/block:HighRes}{/block:IfClickImageForFullRes}<div class="pxu-photo"><img src="{PhotoURL-250}" width="{PhotoWidth-250}" height="{PhotoHeight-250}" data-highres="{PhotoURL-HighRes}" data-width="{PhotoWidth-HighRes}" data-height="{PhotoHeight-HighRes}"></div>{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}</div>{/block:Photos}</div>{/block:If250pxPosts}
+    <div class="500px-posts" style="display: none; visibility: hidden"><div class="photo-slideshow" id="photoset_{PostID}" data-layout="{PhotosetLayout}">{block:Photos}<div class="photo-data">{block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" data-lightbox="{PostID}">{/block:HighRes}{/block:IfClickImageForFullRes}<div class="pxu-photo"><img src="{PhotoURL-500}" width="{PhotoWidth-500}" height="{PhotoHeight-500}" data-highres="{PhotoURL-HighRes}" data-width="{PhotoWidth-HighRes}" data-height="{PhotoHeight-HighRes}"></div>{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}</div>{/block:Photos}</div></div>
+    <div class="400px-posts" style="display: none; visibility: hidden"><div class="photo-slideshow" id="photoset_{PostID}" data-layout="{PhotosetLayout}">{block:Photos}<div class="photo-data">{block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" data-lightbox="{PostID}">{/block:HighRes}{/block:IfClickImageForFullRes}<div class="pxu-photo"><img src="{PhotoURL-400}" width="{PhotoWidth-400}" height="{PhotoHeight-400}" data-highres="{PhotoURL-HighRes}" data-width="{PhotoWidth-HighRes}" data-height="{PhotoHeight-HighRes}"></div>{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}</div>{/block:Photos}</div></div>
+    <div class="250px-posts" style="display: none; visibility: hidden"><div class="photo-slideshow" id="photoset_{PostID}" data-layout="{PhotosetLayout}">{block:Photos}<div class="photo-data">{block:IfClickImageForFullRes}{block:HighRes}<a href="{PhotoURL-HighRes}" data-lightbox="{PostID}">{/block:HighRes}{/block:IfClickImageForFullRes}<div class="pxu-photo"><img src="{PhotoURL-250}" width="{PhotoWidth-250}" height="{PhotoHeight-250}" data-highres="{PhotoURL-HighRes}" data-width="{PhotoWidth-HighRes}" data-height="{PhotoHeight-HighRes}"></div>{block:IfClickImageForFullRes}{block:HighRes}</a>{/block:HighRes}{/block:IfClickImageForFullRes}</div>{/block:Photos}</div></div>
     {block:IfShowCaptions}
             {block:Caption}
             <div class="content">{Caption}</div>
@@ -788,10 +803,9 @@ $(document).tooltip({
 </div>
 {/block:Photoset}
        
-       
 {block:Quote}
 <div class="quote"><div class="content">
-    <h3><i class="fa fa-quote-left fa-2x fa-pull-left" aria-hidden="true" style="position:relative; top:-7px;"></i>{Quote}</h3>
+    <h3><i class="fa fa-quote-left fa-2x fa-pull-left" aria-hidden="true" style="position: relative; top: -7px; padding-top: 10px; padding-left: 5px;"></i>{Quote}</h3>
     {block:Source}<span style="margin-left:2em;">— {Source}</span>{/block:Source}
 </div></div>
 {/block:Quote}
@@ -841,7 +855,7 @@ $(document).tooltip({
 
 {block:Video}
 <div class="video">
-    <div class="video-player">{block:If500pxPosts}{Video-500}{/block:If500pxPosts}{block:If400pxPosts}{Video-400}{/block:If400pxPosts}{block:If250pxPosts}{Video-250}{/block:If250pxPosts}</div>
+    <div class="video-player"><div class="500px-posts" style="display: none; visibility: hidden">{Video-500}</div><div class="400px-posts" style="display: none; visibility: hidden">{Video-400}</div><div class="250px-posts" style="display: none; visibility: hidden">{Video-250}</div></div>
     {block:IfShowCaptions}
             {block:Caption}
             <div class="content">{Caption}</div>
@@ -869,9 +883,9 @@ $(document).tooltip({
 </div></div>
 {/block:Answer}
         
-            <div class="infobar"></div>
+            {block:Date}<div class="infobar"></div>
             <div class="infobox">
-            <table style="width: 470px; {block:If400pxPosts}width: 370px;{/block:If400pxPosts} {block:If250pxPosts}width: 220px;{/block:If250pxPosts}"><tr><td>{block:Date}<a href="{Permalink}" class="tooltip" title="{TimeAgo}">{ShortMonth} {DayOfMonth}, {Year}</a>{/block:Date}{block:RebloggedFrom} <i class="fa fa-retweet" aria-hidden="true"></i> <a href="{ReblogParentURL}">{ReblogParentName}</a>{block:PermalinkPage} <i class="fa fa-pencil" aria-hidden="true"></i> <a href="{ReblogRootURL}">{ReblogRootName}</a>{/block:PermalinkPage}{/block:RebloggedFrom} — <a href="{Permalink}" class="tooltip" title="Permalink">{NoteCountWithLabel}</a>{block:HasTags}{block:IfNotAlwaysShowTags} — <a href="javaScript:void(0);"><span class="tagtoggle">Tags</span></a>{/block:IfNotAlwaysShowTags}{/block:HasTags}</td><td style="width: 60px;">
+            <table style="width: 470px; {block:If400pxPosts}width: 370px;{/block:If400pxPosts} {block:If250pxPosts}width: 220px;{/block:If250pxPosts}"><tr><td><a href="{Permalink}" class="tooltip" title="{TimeAgo}">{ShortMonth} {DayOfMonth}, {Year}</a>{block:RebloggedFrom} <i class="fa fa-retweet" aria-hidden="true"></i> <a href="{ReblogParentURL}">{ReblogParentName}</a>{block:PermalinkPage} <i class="fa fa-pencil" aria-hidden="true"></i> <a href="{ReblogRootURL}">{ReblogRootName}</a>{/block:PermalinkPage}{/block:RebloggedFrom} — <a href="{Permalink}" class="tooltip" title="Permalink">{NoteCountWithLabel}</a>{block:HasTags}{block:IfNotAlwaysShowTags} — <a href="javaScript:void(0);"><span class="tagtoggle">Tags</span></a>{/block:IfNotAlwaysShowTags}{/block:HasTags}</td><td style="width: 60px;">
             
             
             <ul class="rebloglike">
@@ -894,42 +908,40 @@ $(document).tooltip({
             </td></tr>
             {block:HasTags}<tr><td colspan="3"><span class="tags" {block:IfNotAlwaysShowTags}style="display: none;"{/block:IfNotAlwaysShowTags}>{block:Tags}<a href="{TagURL}">#{Tag}</a>   {/block:Tags}</span></td></tr>{/block:HasTags}
             </table>
-            </div>
+            </div>{/block:Date}
             </div>
             
-        {block:PermalinkPage}{block:PostNotes}<div class="post pagenotes">{PostNotes}</div>{/block:PostNotes}{/block:PermaLinkPage}
+        {block:PermalinkPage}{block:PostNotes}<div class="post pagenotes"><h3>Post Notes</h3>{PostNotes}</div>{/block:PostNotes}{/block:PermaLinkPage}
 {/block:Posts}
 </div>
 </div>
 
 
 </body>
-{block:IfInfiniteScrolling}
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#content').infinitescroll({
-        navSelector  : "div#navigation",            
-        nextSelector : "div#navigation a#nextPage",
-        itemSelector : ".post",
-        loadingText  : " ",
-        loadingImg   : "http://static.tumblr.com/o4povtk/oFno5uhgy/blank.gif",
-        bufferPx     : 200,
-        doneText     : " "
-    }, function(newElements){
-        var $newElems = $(newElements);
-        var $newElemsIDs = $newElems.map(function(){return this.id;}).get();
-        Tumblr.LikeButton.get_status_by_post_ids($newElemsIDs);
-    });
-});
-</script>
-{/block:IfInfiniteScrolling}
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="http://static.tumblr.com/o4povtk/bMwopcun4/lightbox.js"></script>
 <script>
-$(document).ready(function(){
+$(document).ready(function() {
     
     setTimeout(function(){
         $("#content").removeClass("fade slow");
     }, 2000);
+    
+    lightbox.option({
+      'showImageNumberLabel': false,
+    });
+    
+    var postWidth = {select:Post Width};
+	$("blockquote img").css("maxWidth", postWidth-50 + "px");
+	$(".infobar, #pagcont table").css("width", postWidth-20 + "px");
+	$(".infobox, .infobox table").css("width", postWidth-30 + "px");
+	$(".pagenotes").css("width", postWidth-25 + "px");
+	if (postWidth == 500)
+	    $(".500px-posts").css({display: "block", visibility: "visible"});
+	else if (postWidth == 400) {
+	    $(".400px-posts").css({display: "block", visibility: "visible"});
+	} else if (postWidth == 250) {
+	    $(".250px-posts").css({display: "block", visibility: "visible"});
+	}
     
     $('p').each(function() {
         var text = $(this).html();
@@ -977,6 +989,7 @@ $(document).ready(function(){
    });{/block:IfNotDisableAbout}
    
    {block:IfNotDisableAsk}
+   {block:IfNotUseAskPageInstead}
    $("#msgbtn").click(function() {
       if (currentWindow.attr("id") != "msgcont") {
           currentWindow.fadeOut(500);
@@ -986,7 +999,7 @@ $(document).ready(function(){
           currentWindow.fadeIn(500);
           currentLink.addClass("mlinksel");
       } 
-   });{/block:IfNotDisableAsk}
+   });{/block:IfNotUseAskPageInstead}{/block:IfNotDisableAsk}
    
    {block:IfNotDisableNav}
    $("#navbtn").click(function() {
