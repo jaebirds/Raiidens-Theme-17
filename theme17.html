@@ -4,8 +4,8 @@
  |
  |  Theme #17 by raiidens (@ tumblr)
  |  Published July 2016
- |  Updated September 2017
- |  Ver. 2.00
+ |  Updated April 2018
+ |  Ver. 2.01
  |
  |  Edit as much as you like, but please do not
  |  claim as your own work, and leave credit somewhere.
@@ -47,6 +47,7 @@
 <meta name="if:Always show tags" content="0">
 <meta name="if:Use ask page instead" content="0">
 <meta name="if:Disable ask" content="0">
+<meta name="if:Disable submissions" content="1">
 <meta name="if:Disable about" content="0">
 <meta name="if:Disable nav" content="0">
 <meta name="if:Black and white images" content="0">
@@ -679,6 +680,7 @@ $(document).tooltip({
     <div id="rightcont">
         <div class="mlink mlinksel" id="contentbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-th-large fa-stack-1x"></i></span>content</div>
         {block:IfNotDisableAsk}{block:IfUseAskPageInstead}<a href="/ask">{/block:IfUseAskPageInstead}<div class="mlink" id="msgbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-comment fa-stack-1x"></i></span>message</div>{block:IfUseAskPageInstead}</a>{/block:IfUseAskPageInstead}{/block:IfNotDisableAsk}
+        {block:IfNotDisableSubmissions}<a href="/submit"><div class="mlink" id="msgbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-inbox fa-stack-1x"></i></span>submit</div></a>{/block:IfNotDisableSubmissions}
         {block:IfNotDisableAbout}<div class="mlink" id="aboutbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-user fa-stack-1x"></i></span>about</div>{/block:IfNotDisableAbout}
         {block:IfNotDisableNav}<div class="mlink" id="navbtn"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-bars fa-stack-1x"></i></span>navigation</div>{/block:IfNotDisableNav}
         <a href="http://raiidens.tumblr.com/tagged/themesbyraiidens"><div class="mlink tooltip" title="© raiidens"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-code fa-stack-1x"></i></span>theme</div></a>
